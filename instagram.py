@@ -145,7 +145,7 @@ def do(b, all):
             pass
 
         text = b.find_element_by_xpath('//form/textarea')
-        #REPLACE 'YOUR COMMENT' ON THE NEXT LINE WITH WHAT YOU WANT TO COMMENT
+        # REPLACE 'YOUR COMMENT' ON THE NEXT LINE WITH WHAT YOU WANT TO COMMENT
         # comment = raw_input("Enter what do you want to comment: ")
         text.send_keys(str(random()) + Keys.RETURN)
         cross = b.find_element_by_xpath('//body/div[2]/div/button')
