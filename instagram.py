@@ -139,7 +139,7 @@ def do(b, all):
 
 
         try:
-            liked = b.find_element_by_xpath('//article/div[2]/section[1]/a[1]/span[contains(text(), "like")]')
+            liked = b.find_element_by_xpath('//article/div[2]/section[1]/a[1]/span[contains(text(), "Like")]')
             liked.click()
         except:
             pass
@@ -147,7 +147,7 @@ def do(b, all):
         text = b.find_element_by_xpath('//form/textarea')
         # REPLACE 'YOUR COMMENT' ON THE NEXT LINE WITH WHAT YOU WANT TO COMMENT
         # comment = raw_input("Enter what do you want to comment: ")
-        text.send_keys(str(random()) + Keys.RETURN)
+        # text.send_keys(str(random()) + Keys.RETURN)
         cross = b.find_element_by_xpath('//body/div[2]/div/button')
         cross.click()
 do(b,all)
