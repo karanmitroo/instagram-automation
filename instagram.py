@@ -25,7 +25,6 @@ def login_from_insta(b, username, password):
     login_password.send_keys(password)
     log_in = b.find_element_by_xpath('//button[contains(text(), "Log in")]')
     log_in.click()
-
 login_via_fb = raw_input("If you want to login via Facebook press y/Y else login via instagram credentials by pressing n/N: ")
 
 if login_via_fb.lower() == 'y':
@@ -121,18 +120,18 @@ while True:
     last_height = new_height
 
 
+b.execute_script("window.scrollTo(0, 0);")
 '''
 all IS THE VARIABLE NAME THAT IS THE DIV THAT CONTAINS ALL THE PICTURES
 '''
 all = b.find_element_by_xpath('//article/div/div')
 def do(b, all):
-    pictures = all.find_elements_by_xpath('./div/a')
+    pictures = all.find_elements_by_xpath('./div/div')
     for pic in pictures:
-
         pic.click()
         time.sleep(1)
         try:
-            src =  pic.find_element_by_xpath('.//img').get_attribute('src')
+            src =  b.find_element_by_xpath('//article/div/div/div/div/img').get_attribute('src')
             urllib.urlretrieve(src, os.getcwd() + '/' + folder_name + '/' + src.split('/')[-1])
         except:
             pass
