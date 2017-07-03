@@ -133,10 +133,16 @@ def do(b, all):
 
         #TRY IF YOU GET A VIDEO OR ELSE DOWNLOAD THE IMAGE.
         try:
-            src =  b.find_element_by_xpath('//article/div/div/div/div//video').get_attribute('src')
+            src = WebDriverWait(b, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//article/div[1]/div/div[1]/div/div/div[1]/div/video'))
+                )
+            src =  src.get_attribute('src')
             urllib.urlretrieve(src, os.getcwd() + '/' + folder_name + '/' + src.split('/')[-1])
         except:
-            src =  b.find_element_by_xpath('//article/div/div/div/div/img').get_attribute('src')
+            src = WebDriverWait(b, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//article/div[1]/div/div/div[1]/img'))
+                )
+            src =  src.get_attribute('src')
             urllib.urlretrieve(src, os.getcwd() + '/' + folder_name + '/' + src.split('/')[-1])
         finally:
             pass
