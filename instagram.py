@@ -65,7 +65,7 @@ else:
 os.mkdir(folder_name)
 
 b = webdriver.Chrome()
-b.implicitly_wait(5)
+b.implicitly_wait(2)
 b.get('http://instagram.com')
 
 '''
@@ -73,7 +73,7 @@ FINDING THE LOGIN BUTTON TO GO TO THE LOGIN PAGE
 '''
 if login_via_fb.lower() == 'y':
     try:
-        log_in = WebDriverWait(b, 20).until(
+        log_in = WebDriverWait(b, 15).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//button[contains(text(), "Facebook")]'))
         )
@@ -83,7 +83,7 @@ if login_via_fb.lower() == 'y':
 
 else:
     try:
-        log_in = WebDriverWait(b, 20).until(
+        log_in = WebDriverWait(b, 15).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//a[contains(text(), "Log in")]'))
         )
@@ -146,7 +146,7 @@ def do(b, all):
 
         # TRY IF YOU GET A VIDEO OR ELSE DOWNLOAD THE IMAGE.
         try:
-            src = WebDriverWait(b, 3).until(
+            src = WebDriverWait(b, 2).until(
                 EC.presence_of_element_located(
                     (By.XPATH, '//article/div/div/div/div/div/div/div//video'))
             )
@@ -156,12 +156,12 @@ def do(b, all):
         except:
             # FOUND TWO XPATHS FOR IMAGES. INSTAGRAM RANDOMLY PLACES THEM IN ONE OF THEM.
             try:
-                src = WebDriverWait(b, 3).until(
+                src = WebDriverWait(b, 2).until(
                     EC.presence_of_element_located(
                         (By.XPATH, '//article/div/div/div/div/img'))
                 )
             except:
-                src = WebDriverWait(b, 3).until(
+                src = WebDriverWait(b, 2).until(
                     EC.presence_of_element_located(
                         (By.XPATH, '//article/div/div/div/div/div/img'))
                 )
@@ -178,10 +178,19 @@ def do(b, all):
         except:
             pass
 
-        text = b.find_element_by_xpath('//form/textarea')
+        '''
+        TO COMMENT ON PICS. WORKING BUT INSTA BLOCKS COMMENTS AFTER 5 PICS
+        @TODO:
+            ---> Comment on pics only after some interval of time.
+        '''
+        # text = b.find_element_by_xpath('//form/textarea')
         # REPLACE 'YOUR COMMENT' ON THE NEXT LINE WITH WHAT YOU WANT TO COMMENT
         # comment = raw_input("Enter what do you want to comment: ")
         # text.send_keys(str(random()) + Keys.RETURN)
+
+        '''
+        TO CLOSE THE IMAGE
+        '''
         cross = b.find_element_by_xpath('//body/div[2]/div/button')
         cross.click()
 
