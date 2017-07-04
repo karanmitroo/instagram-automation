@@ -56,7 +56,7 @@ else:
 
 os.mkdir(folder_name)
 
-b = webdriver.Firefox()
+b = webdriver.Chrome()
 b.implicitly_wait(5)
 b.get('http://instagram.com')
 
@@ -133,15 +133,21 @@ def do(b, all):
 
         #TRY IF YOU GET A VIDEO OR ELSE DOWNLOAD THE IMAGE.
         try:
-            src = WebDriverWait(b, 10).until(
-                EC.presence_of_element_located((By.XPATH, '//article/div[1]/div/div[1]/div/div/div[1]/div/video'))
+            src = WebDriverWait(b, 3).until(
+                EC.presence_of_element_located((By.XPATH, '//article/div/div/div/div/div/div/div//video'))
                 )
             src =  src.get_attribute('src')
             urllib.urlretrieve(src, os.getcwd() + '/' + folder_name + '/' + src.split('/')[-1])
         except:
-            src = WebDriverWait(b, 10).until(
-                EC.presence_of_element_located((By.XPATH, '//article/div[1]/div/div/div[1]/img'))
-                )
+            #FOUND TWO XPATHS FOR IMAGES. INSTAGRAM RANDOMLY PLACES THEM IN ONE OF THEM.
+            try:
+                src = WebDriverWait(b, 3).until(
+                    EC.presence_of_element_located((By.XPATH, '//article/div/div/div/div/img'))
+                    )
+            except:
+                src = WebDriverWait(b, 3).until(
+                    EC.presence_of_element_located((By.XPATH, '//article/div/div/div/div/div/img'))
+                    )
             src =  src.get_attribute('src')
             urllib.urlretrieve(src, os.getcwd() + '/' + folder_name + '/' + src.split('/')[-1])
         finally:
