@@ -1,2 +1,4 @@
 *.log
 *.yml
+*.pyc
+Other Selenium Codes/*

@@ -3,7 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-from random import random
+from comment_list import comment_list
+import random
 import urllib
 import getpass
 import time
@@ -140,6 +141,7 @@ all = b.find_element_by_xpath('//article/div/div')
 
 def do(b, all):
     pictures = all.find_elements_by_xpath('./div/div')
+    comment_counter = 0
     for pic in pictures:
         pic.click()
         time.sleep(1)
@@ -183,10 +185,17 @@ def do(b, all):
         @TODO:
             ---> Comment on pics only after some interval of time.
         '''
-        # text = b.find_element_by_xpath('//form/textarea')
-        # REPLACE 'YOUR COMMENT' ON THE NEXT LINE WITH WHAT YOU WANT TO COMMENT
-        # comment = raw_input("Enter what do you want to comment: ")
-        # text.send_keys(str(random()) + Keys.RETURN)
+        if comment_counter == 5:
+            text = b.find_element_by_xpath('//form/textarea')
+            comment = random.choice(comment_list[0])
+            for i in range(1,len(comment_list)):
+                comment += ' ' + random.choice(comment_list[i])
+            # REPLACE 'YOUR COMMENT' ON THE NEXT LINE WITH WHAT YOU WANT TO COMMENT
+            # comment = raw_input("Enter what do you want to comment: ")
+            text.send_keys(comment + Keys.RETURN)
+            comment_counter = 0
+
+        comment_counter += 1
 
         '''
         TO CLOSE THE IMAGE
