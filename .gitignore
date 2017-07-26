@@ -2,3 +2,5 @@
 *.yml
 *.pyc
 Other Selenium Codes/*
+.venv/*
+*.jpg

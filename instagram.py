@@ -144,19 +144,18 @@ def do(b, all):
     comment_counter = 0
     for pic in pictures:
         pic.click()
-        time.sleep(1)
 
         # TRY IF YOU GET A VIDEO OR ELSE DOWNLOAD THE IMAGE.
         try:
             src = WebDriverWait(b, 2).until(
                 EC.presence_of_element_located(
-                    (By.XPATH, '//article/div/div/div/div/div/div/div//video'))
+                    (By.XPATH, '//article/div/div/div/div/div//video'))
             )
             src = src.get_attribute('src')
             urllib.urlretrieve(src, os.getcwd() + '/' +
                                folder_name + '/' + src.split('/')[-1])
         except:
-            # FOUND TWO XPATHS FOR IMAGES. INSTAGRAM RANDOMLY PLACES THEM IN ONE OF THEM.
+            # FOUND TWO XPATHS FOR IMAGES. INSTAGRAM RANDOMLY PLACES PICTURE IN ONE OF THEM.
             try:
                 src = WebDriverWait(b, 2).until(
                     EC.presence_of_element_located(
@@ -200,7 +199,7 @@ def do(b, all):
         '''
         TO CLOSE THE IMAGE
         '''
-        cross = b.find_element_by_xpath('//body/div[2]/div/button')
+        cross = b.find_element_by_xpath('//body//div/button[contains(text(), "Close")]')
         cross.click()
 
 
