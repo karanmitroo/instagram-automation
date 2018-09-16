@@ -1,6 +1,6 @@
 *.log
 *.yml
 *.pyc
-Other Selenium Codes/*
-.venv/*
+.venv/
 *.jpg
+.idea/

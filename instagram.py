@@ -10,87 +10,47 @@ import getpass
 import time
 import os
 
-
-def login_from_fb(b, username, password):
-    login_username = b.find_element_by_id('email')
-    login_password = b.find_element_by_id('pass')
-    login_username.send_keys(username)
-    login_password.send_keys(password)
-    login_button = b.find_element_by_id('loginbutton')
-    login_button.click()
-
-
-def login_from_insta(b, username, password):
-    login_username = b.find_elements_by_xpath('//input')[0]
-    login_password = b.find_elements_by_xpath('//input')[1]
-    login_username.send_keys(username)
-    login_password.send_keys(password)
-    log_in = b.find_element_by_xpath('//button[contains(text(), "Log in")]')
-    log_in.click()
-
-
-login_via_fb = raw_input(
+login_mode = input(
     "If you want to login via Facebook press y/Y else login via instagram credentials by pressing n/N: ")
 
-if login_via_fb.lower() == 'y':
-    username = raw_input("Enter your Facebook username: ")
-    password = getpass.getpass("Enter your Facebook password: ")
-    password_match = getpass.getpass("Enter your Facebook password again: ")
-else:
-    username = raw_input("Enter your Instagram username: ")
-    password = getpass.getpass("Enter your Instagram password: ")
-    password_match = getpass.getpass("Enter your Instagram password again: ")
+login_method = 'facebook' if login_mode.lower == 'y' else 'instagram'
 
-while (password != password_match):
-    password = getpass.getpass(
-        "Your password did NOT match. Please enter your password again: ")
-    password_match = getpass.getpass("Enter your password again: ")
+# Get the users username and password
+username = input("Enter your {} username: ".format(login_method.upper()))
+password = getpass.getpass("Enter your {} password: ".format(login_method.upper()))
+password_match = getpass.getpass("Enter your {} password again: ".format(login_method.upper()))
+
+# Keep getting the password until two consecutive inputs do NOT match
+while password != password_match:
+    password = getpass.getpass("Your password did NOT match. Please enter your password again: ")
+    password_match = getpass.getpass("Please enter your password again: ")
 
 
 '''
 CREATING FOLDER WITH THE NAME OF THE
 PERSON YOU WANT TO DOWNLOAD PICTURES OF
 '''
-friend = raw_input(
-    "Enter the username of the person you want to like and download all the photos of: ")
-if os.path.exists(friend):
-    folder_name = raw_input("The folder with the name '" + friend +
-                            "' already exists. Enter the name of folder you want to save all photos to: ")
-    while os.path.exists(folder_name):
-        folder_name = raw_input("The folder with the name '" + folder_name +
-                                "' also exists. Enter the name of folder you want to save all photos to: ")
+friend_username = input("Enter the INSTAGRAM username of the person you want to like and download all the photos of: ")
+folder_name = friend_username
 
-else:
-    folder_name = friend
+# Check if the directory with the name already exists. If yes then ask for some other directory name.
+if os.path.exists(folder_name):
+    folder_name = input("The folder with the name '{}' already exists. "
+                        "Enter the name of folder you want to save all photos to: ".format(friend_username))
+
+    while os.path.exists(folder_name):
+        folder_name = input("The folder with the name '{}' also exists. "
+                            "Enter the name of folder you want to save all photos to: ".format(folder_name))
 
 os.mkdir(folder_name)
 
-b = webdriver.Chrome()
-b.implicitly_wait(2)
+b = webdriver.Chrome('/Users/karanmitroo/Downloads/chromedriver')
 b.get('http://instagram.com')
 
 '''
 FINDING THE LOGIN BUTTON TO GO TO THE LOGIN PAGE
 '''
-if login_via_fb.lower() == 'y':
-    try:
-        log_in = WebDriverWait(b, 15).until(
-            EC.presence_of_element_located(
-                (By.XPATH, '//button[contains(text(), "Facebook")]'))
-        )
-    except:
-        b.quit()
-    log_in.click()
 
-else:
-    try:
-        log_in = WebDriverWait(b, 15).until(
-            EC.presence_of_element_located(
-                (By.XPATH, '//a[contains(text(), "Log in")]'))
-        )
-    except:
-        b.quit()
-    log_in.click()
 
 
 '''
@@ -190,7 +150,7 @@ def do(b, all):
             for i in range(1,len(comment_list)):
                 comment += ' ' + random.choice(comment_list[i])
             # REPLACE 'YOUR COMMENT' ON THE NEXT LINE WITH WHAT YOU WANT TO COMMENT
-            # comment = raw_input("Enter what do you want to comment: ")
+            # comment = input("Enter what do you want to comment: ")
             text.send_keys(comment + Keys.RETURN)
             comment_counter = 0
 
