@@ -1,14 +1,17 @@
+import getpass
+import os
+import random
+import time
+import urllib
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
 from comment_list import comment_list
-import random
-import urllib
-import getpass
-import time
-import os
+from utils import login_from_fb, login_from_insta, get_login_page
 
 login_mode = input(
     "If you want to login via Facebook press y/Y else login via instagram credentials by pressing n/N: ")
@@ -44,37 +47,39 @@ if os.path.exists(folder_name):
 
 os.mkdir(folder_name)
 
-b = webdriver.Chrome('/Users/karanmitroo/Downloads/chromedriver')
-b.get('http://instagram.com')
+browser_obj = webdriver.Chrome('/Users/karanmitroo/Downloads/chromedriver')
 
-'''
-FINDING THE LOGIN BUTTON TO GO TO THE LOGIN PAGE
-'''
+# Setting implicit wait to 10 seconds.
+browser_obj.implicitly_wait(10)
 
+browser_obj.get('http://instagram.com')
 
-
+# Making a delay of 10 seconds to load
+print (login_method)
 '''
 CALLING THE LOGIN FUNCTION DEPENDING UPON THE
 USER PREFERENCE OF LOGIN VIA FB OR INSTA
 '''
-if login_via_fb.lower() == 'y':
-    login_from_fb(b, username, password)
+if login_method == "facebook":
+    login_from_fb(browser_obj, username, password)
 else:
-    login_from_insta(b, username, password)
 
+    login_from_insta(browser_obj, username, password)
+
+# Creating a delay for log in to happen properly
 time.sleep(5)
 
 '''
 GOING TO THE PROFILE OF THE SPECIFIED USER
 '''
-b.get('http://instagram.com/' + friend + '/')
+browser_obj.get('http://instagram.com/' + friend_username + '/')
 
 
 '''
 LOADING MORE PICTURES IN THEIR PROFILE
 '''
 try:
-    load_more = WebDriverWait(b, 10).until(
+    load_more = WebDriverWait(browser_obj, 10).until(
         EC.presence_of_element_located(
             (By.XPATH, '//a[contains(text(), "Load more")]'))
     )
@@ -82,24 +87,24 @@ try:
 except:
     pass
 
-last_height = b.execute_script("return document.body.scrollHeight")
+last_height = browser_obj.execute_script("return document.body.scrollHeight")
 while True:
-    b.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    browser_obj.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     time.sleep(3)
-    new_height = b.execute_script("return document.body.scrollHeight")
+    new_height = browser_obj.execute_script("return document.body.scrollHeight")
     if new_height == last_height:
         break
     last_height = new_height
 
 
-b.execute_script("window.scrollTo(0, 0);")
+browser_obj.execute_script("window.scrollTo(0, 0);")
 '''
 all IS THE VARIABLE NAME THAT IS THE DIV THAT CONTAINS ALL THE PICTURES
 '''
-all = b.find_element_by_xpath('//article/div/div')
+all = browser_obj.find_element_by_xpath('//article/div/div')
 
 
-def do(b, all):
+def do(browser_obj, all):
     pictures = all.find_elements_by_xpath('./div/div')
     comment_counter = 0
     for pic in pictures:
@@ -112,8 +117,7 @@ def do(b, all):
                     (By.XPATH, '//article/div/div/div/div/div//video'))
             )
             src = src.get_attribute('src')
-            urllib.urlretrieve(src, os.getcwd() + '/' +
-                               folder_name + '/' + src.split('/')[-1])
+            urllib.request.urlretrieve(src, os.getcwd() + '/' + folder_name + '/' + src.split('/')[-1])
         except:
             # FOUND TWO XPATHS FOR IMAGES. INSTAGRAM RANDOMLY PLACES PICTURE IN ONE OF THEM.
             try:
@@ -127,13 +131,12 @@ def do(b, all):
                         (By.XPATH, '//article/div/div/div/div/div/img'))
                 )
             src = src.get_attribute('src')
-            urllib.urlretrieve(src, os.getcwd() + '/' +
-                               folder_name + '/' + src.split('/')[-1])
+            urllib.urlretrieve(src, os.getcwd() + '/' + folder_name + '/' + src.split('/')[-1])
         finally:
             pass
 
         try:
-            liked = b.find_element_by_xpath(
+            liked = browser_obj.find_element_by_xpath(
                 '//article/div[2]/section[1]/a[1]/span[contains(text(), "Like")]')
             liked.click()
         except:
@@ -145,7 +148,7 @@ def do(b, all):
             ---> Comment on pics only after some interval of time.
         '''
         if comment_counter == 5:
-            text = b.find_element_by_xpath('//form/textarea')
+            text = browser_obj.find_element_by_xpath('//form/textarea')
             comment = random.choice(comment_list[0])
             for i in range(1,len(comment_list)):
                 comment += ' ' + random.choice(comment_list[i])
@@ -159,9 +162,9 @@ def do(b, all):
         '''
         TO CLOSE THE IMAGE
         '''
-        cross = b.find_element_by_xpath('//body//div/button[contains(text(), "Close")]')
+        cross = browser_obj.find_element_by_xpath('//body//div/button[contains(text(), "Close")]')
         cross.click()
 
 
-do(b, all)
-b.quit()
+do(browser_obj, all)
+browser_obj.quit()
