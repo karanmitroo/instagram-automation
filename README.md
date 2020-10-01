@@ -1,6 +1,7 @@
-# Selenium Automation
+# Instagram Automation with Selenium
 
-Automating web browser using Selenium/ Python. This app lets user to like and download all the instagram content of any user they are following.
+Automating web browser using Selenium - Python.<br>
+This app lets user to like and download all the instagram content of any user they are following.
 
 ## Getting Started
 
